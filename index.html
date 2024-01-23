@@ -335,7 +335,7 @@
             <button class="active-btn skill" id="btn4" style="background-image: url(./images/tiger-debuff.png); position: absolute; top: 45%; left: 35%; background-position: 50% 100%; background-size: 105%;" disabled></button>
             <button class="passive-btn skill" id="btn3" style="background-image: url(./images/scatter-shot.png); position: absolute; top: 45%; left: 45%; background-position: 50% 130%; background-size: 100%;" disabled></button>
             <button class="passive-btn skill" id="btn14" style="background-image: url(./images/trap.png); position: absolute; top: 45%; left: 55%; background-position: 50% 160%; background-size: 105%;" disabled></button>
-            <button class="active-btn skill" id="btn5" style="background-image: url(./images/raven-debuff.png); position: absolute; top: 45%; left: 65%; background-position: 50% 100%; background-size: 110%;" disabled></button>
+            <button class="active-btn skill" id="btn15" style="background-image: url(./images/raven-debuff.png); position: absolute; top: 45%; left: 65%; background-position: 50% 100%; background-size: 110%;" disabled></button>
             <button class="active-btn skill" id="btn20" style="background-image: url(./images/headshot.png); position: absolute; top: 45%; left: 70%; background-position: 50% 60%; background-size: 105%;" disabled></button>
             <button class="passive-btn skill" id="btn21" style="background-image: url(./images/headshot.png); position: absolute; top: 45%; left: 75%; background-position: 50% 60%; background-size: 105%;" disabled></button>
         </div>
@@ -838,7 +838,18 @@
             ["btn4", ["btn9"]],
             ["btn9", ["btn10", "btn11"]],
             ["startbtn3", ["btn23"]],
-            ["btn23", ["btn7"]]
+            ["btn23", ["btn7", "btn18"]],
+            ["startbtn2", ["btn13", "btn12", "btn14"]],
+            ["btn12", ["btn15", "btn16"]],
+            ["btn15", ["btn20"]],
+            ["btn20", ["btn21", "btn22"]],
+            ["btn16",["btn17"]],
+            ["btn17", ["btn18"]],
+            ["btn18", ["btn19"]],
+            ["startbtn4", ["btn24", "btn25", "btn26"]],
+            ["btn26", ["btn27", "btn28"]],
+            ["btn27", ["btn29"]],
+            ["btn28", ["btn29"]]
         ]);
 
         // Let's setup the buttons
@@ -859,9 +870,11 @@
                     childrenIds.forEach(childId => {
                         const childButton = document.getElementById(childId);
                         if (childButton) {
-                            console.log(childButton);
-                            childButton.classList.add('selectable');
+                            console.log(childButton);                 
                             childButton.disabled = false;
+                            if(!childButton.classList.contains('selected')){
+                               childButton.classList.add('selectable');
+                            }
                         }
                     });
                 }
