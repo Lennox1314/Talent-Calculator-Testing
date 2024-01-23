@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/leader-line/leader-line.min.js"></script>
+    <title>Talent Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+        }
+
+        .background{
+            background: linear-gradient(rgb(165, 164, 164), rgb(63, 63, 63));
+            width: 1500px;
+            height: 900px;
+            display: inline-block;
+            position: absolute;
+            left: .5%;
+            border-style: inset;
+            border-color: rgba(0, 0, 0, 0.822);
+        }
+
+        .tabs {
+            background-color: none;
+            overflow: hidden;
+            display: flex;
+            position: absolute;
+            left: 7%;
+            top: 7%;
+
+        }
+
+        .tab-btn {
+            cursor: pointer;
+            padding: 14px 16px;
+            transition: 0.3s;
+            margin-right: 10px;
+            height: 20px;
+            width: 80px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: none;
+            background-color: #6b686a;
+        }
+
+        .tab-btn:hover {
+            background-color: #515153;
+        }
+
+        .talents-container {
+            overflow: hidden;
+            position: absolute;
+            width: 1250px;
+            height: 750px;
+            left: 7%;
+            top: 10%;
+            border-style: inset;
+            border-width: 10px;
+            border-color: black;
+        }
+
+        .talents-box {
+            width: 100%;
+            height: 100%;
+            transform-origin: 0, 0;
+            position: absolute;
+            transition: transform 0.3s ease-out;
+            background-image:linear-gradient(rgba(0, 0, 0, 0.5),
+                       rgba(0, 0, 0, 0.8)), url(./images/ranger_background.png);
+            background-size: cover;
+            background-repeat: no-repeat;
+            opacity: .9;
+        }
+
+        .talents-box p {
+            margin: 0;
+        }
+
+        .labels-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .buttons-container {
+            display: flex;
+            margin-left: auto;
+        }
+
+        .revert-btn,
+        .confirm-btn {
+            cursor: pointer;
+            margin-top: 2px;
+            width: 150px;
+            margin-left: 1%;
+        }
+
+        .undo-btn {
+            background-color: gray;
+            cursor: pointer;
+            margin-top: 2px;
+            width: 100px;
+        }
+
+        .revert-btn {
+            background-color: red;
+        }
+
+        .confirm-btn {
+            background-color: green;
+        }
+
+        .draggable {
+            cursor: grab;
+            user-select: none;
+        }
+
+        .draggable.grabbing {
+            cursor: grabbing;
+        }
+
+        .zoom-btn-container {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .zoom-btn {
+            cursor: pointer;
+            padding: 5px;
+            margin: 5px;
+        }
+
+        .passive-btn{
+            width: 40px;
+            height: 40px;
+            border-radius: 50px;
+            cursor: pointer;
+            z-index: 1;
+            position: relative;
+            overflow: hidden;
+            
+        }
+
+        .passive-btn:hover{
+            filter: brightness(130%);
+            
+        }
+
+        .active-btn{
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            z-index: 1;
+            position: relative;
+            border-radius: 0px; /* has to be here or it will always turn blue. !important doesnt even help???????? */
+
+        }
+
+        .active-btn:hover{
+            filter: brightness(120%);
+
+        }
+
+        .footer{
+            width: 1270px;
+            display: flex;
+            position: absolute;
+            top: 96%;
+            left: 7%;
+        }
+
+        .labels-container{
+            display: flex;
+            align-items: center;
+        }
+
+        .buttons-container{
+            display: flex;
+            margin-left: auto;
+            
+        }
+
+        .revert-btn, .confirm-btn{
+            cursor: pointer;
+            margin-top: 2px;
+            width: 150px;
+            margin-left: 1%;
+        }
+
+        .undo-btn {
+            background-color: gray;
+            cursor: pointer;
+            margin-top: 2px;
+            width: 100px;
+        }
+
+        .revert-btn{
+            background-color: red;
+        }
+
+        .confirm-btn{
+            background-color: green;
+        }
+
+        .undo-btn:hover, .confirm-btn:hover, .revert-btn:hover{
+            filter:brightness(140%)
+        } 
+
+        .row-container {
+            display: flex;
+            pointer-events: none;
+        }
+
+        .column1 {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            pointer-events: none;
+            width: 40px;
+            position: absolute;
+            top: 50px;
+            left: 40%;
+        }
+
+        .column2 {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            pointer-events: none;
+            width: 40px;
+            position: absolute;
+            top: 50px;
+            left: 45%;
+        }
+
+        .column3 {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            pointer-events: none;
+            width: 40px;
+            position: absolute;
+            top: 50px;
+            left: 60%;
+        }
+
+        .enveus{
+            position: absolute;
+            top: 93%;
+            left: 1%;
+            color: purple;
+            font-size: 20px;
+            opacity: .5;
+            font-family: 'Brush Script MT', cursive;
+        }
+        .enveus-logo{
+            position: absolute;
+            top: 95%;
+            left: 12%;
+            height: 24px;
+            width: 24px;
+            opacity: .5;           
+        }
+        .svg-container{
+            pointer-events: none;
+        }
+
+        .skill{
+            opacity: .3;
+            filter: brightness(100%);
+        }
+
+        .starter-skill{
+            opacity: .7;
+        }
+
+        .selected{
+          opacity: 1;
+          filter: brightness(150%);
+        }
+        .selectable{
+          opacity: .7;
+          filter: brightness(100%);
+        }
+    </style>
+
+<script type="text/javascript" src="digraph.js"></script>
+<title>Talent Calculator</title>
+</head>
+<body>
+    <div class="background">
+    <div class="tabs">
+        <button class="tab-btn" onclick="showContent('class')">Class</button>
+        <button class="tab-btn" onclick="showContent('weapon')">Weapon</button>
+        <button class="tab-btn" onclick="showContent('secondary')">Secondary</button>
+    </div>
+
+    <div class="talents-container" id="class-content">
+        <div class="talents-box">
+            <div class="row-one">
+            <button class="passive-btn skill" id="btn8" style="background-image: url(./images/thorns.png); position: absolute; top: 5%; left: 40%; background-position: 50% 150%; background-size: 105%;" disabled></button>
+            <button class="passive-btn skill" id="btn19" style="background-image: url(./images/thundering-shot.png); position: absolute; top: 5%; left: 60%; background-position: 50% 110%; background-size: 105%;" disabled></button>
+        </div>
+        <div class="row-two">
+            <button class="active-btn skill" id="btn7"  style="background-image: url(./images/thorns.png); position: absolute; top: 15%; left: 40%; background-position: 50% 110%; background-size: 115%;" disabled></button>
+            <button class="active-btn skill" id="btn23" style="background-image: url(./images/arrow-rain.png); position: absolute; top: 15%; left: 50%; background-position: 50% 85%; background-size: 125%;" disabled></button>
+            <button class="active-btn skill" id="btn18" style="background-image: url(./images/thundering-shot.png); position: absolute; top: 15%; left: 60%; background-position: 50% 100%; background-size: 105%;" disabled></button>
+        </div>
+        <div class="row-three">
+            <button class="active-btn skill" id="btn6" style="background-image: url(./images/ranger-ability.png); position: absolute; top: 25%; left: 30%; background-position: 50% 130%; background-size: 115%;" disabled></button>
+            <button class="active-btn skill" id="btn5" style="background-image: url(./images/barbed-ammo.png); position: absolute; top: 25%; left: 35%; background-position: 50% 110%; background-size: 115%;" disabled></button>
+            <button class="passive-btn skill" id="btn2" style="background-image: url(./images/scatter-shot.png); position: absolute; top: 25%; left: 45%; background-position: 50% 140%; background-size: 100%;" disabled></button>
+            <button class="active-btn skill starter-skill" id="startbtn3" style="background-image: url(./images/weighted-ammo.png); position: absolute; top: 25%; left: 50%; background-position: 50% 70%; background-size: 120%;"></button>
+            <button class="passive-btn skill" id="btn13" style="background-image: url(./images/trap.png); position: absolute; top: 25%; left: 55%; background-position: 50% 180%; background-size: 105%;" disabled></button>
+            <button class="active-btn skill" id="btn16" style="background-image: url(./images/conc-ammo.png); position: absolute; top: 25%; left: 65%; background-position: 50% 80%; background-size: 125%;" disabled></button>
+            <button class="active-btn skill" id="btn17" style="background-image: url(./images/lighting-reload.png); position: absolute; top: 25%; left: 70%; background-position: 50% 160%; background-size: 105%;" disabled></button>           
+        </div>
+        <div class="row-four">
+            <button class="active-btn skill" id="btn1" style="background-image: url(./images/tiger.png); position: absolute; top: 35%; left: 40%; background-position: 50% 60%; background-size: 120%;" disabled></button>
+            <button class="active-btn skill  starter-skill" id="startbtn1" style="background-image: url(./images/scatter-shot.png); position: absolute; top: 35%; left: 45%; background-position: 50% 140%; background-size: 100%;"></button>
+            <button class="active-btn skill  starter-skill" id="startbtn2" style="background-image: url(./images/trap.png); position: absolute; top: 35%; left: 55%; background-position: 50% 160%; background-size: 105%;"></button>
+            <button class="active-btn skill" id="btn12" style="background-image: url(./images/raven.png); position: absolute; top: 35%; left: 60%; background-position: 50% 60%; background-size: 120%;" disabled></button>
+        </div>
+        <div class="row-five">
+            <button class="passive-btn skill" id="btn10" style="background-image: url(./images/hasten-snipe.png); position: absolute; top: 45%; left: 25%; background-position: 50% 110%; background-size: 110%;" disabled></button>
+            <button class="active-btn skill" id="btn9" style="background-image: url(./images/hasten-snipe.png); position: absolute; top: 45%; left: 30%; background-position: 50% 80%; background-size: 115%;" disabled></button>
+            <button class="active-btn skill" id="btn4" style="background-image: url(./images/tiger-debuff.png); position: absolute; top: 45%; left: 35%; background-position: 50% 100%; background-size: 105%;" disabled></button>
+            <button class="passive-btn skill" id="btn3" style="background-image: url(./images/scatter-shot.png); position: absolute; top: 45%; left: 45%; background-position: 50% 130%; background-size: 100%;" disabled></button>
+            <button class="passive-btn skill" id="btn14" style="background-image: url(./images/trap.png); position: absolute; top: 45%; left: 55%; background-position: 50% 160%; background-size: 105%;" disabled></button>
+            <button class="active-btn skill" id="btn5" style="background-image: url(./images/raven-debuff.png); position: absolute; top: 45%; left: 65%; background-position: 50% 100%; background-size: 110%;" disabled></button>
+            <button class="active-btn skill" id="btn20" style="background-image: url(./images/headshot.png); position: absolute; top: 45%; left: 70%; background-position: 50% 60%; background-size: 105%;" disabled></button>
+            <button class="passive-btn skill" id="btn21" style="background-image: url(./images/headshot.png); position: absolute; top: 45%; left: 75%; background-position: 50% 60%; background-size: 105%;" disabled></button>
+        </div>
+        <div class="row-six">
+            <button class="passive-btn skill" id="btn11" style="background-image: url(./images/hasten-snipe.png); position: absolute; top: 55%; left: 30%; background-position: 50% 110%; background-size: 110%;" disabled></button>
+            <button class="passive-btn skill" id="btn24" style="background-image: url(./images/disengage.png); position: absolute; top: 55%; left: 45%; background-position: 50% 160%; background-size: 105%;" disabled></button>
+            <button class="active-btn skill  starter-skill" id="startbtn4" style="background-image: url(./images/disengage.png); position: absolute; top: 55%; left: 50%; background-position: 50% 160%; background-size: 105%;"></button>
+            <button class="passive-btn skill" id="btn25" style="background-image: url(./images/disengage.png); position: absolute; top: 55%; left: 55%; background-position: 50% 160%; background-size: 105%;" disabled></button>
+            <button class="passive-btn skill" id="btn22" style="background-image: url(./images/headshot.png); position: absolute; top: 55%; left: 70%; background-position: 50% 60%; background-size: 105%;" disabled></button>
+        </div>
+        <div class="row-seven">
+            <button class="active-btn skill" id="btn26" style="background-image: url(./images/call-of-the-wild.png); position: absolute; top: 65%; left: 50%; background-position: 50% 60%; background-size: 115%;" disabled></button>
+        </div>
+        <div class="row-eight">
+            <button class="active-btn skill" id="btn27" style="background-image: url(./images/bear.png); position: absolute; top: 75%; left: 45%; background-position: 70% 45%; background-size: 120%;" disabled></button>
+            <button class="active-btn skill" id="btn28" style="background-image: url(./images/back-off.png); position: absolute; top: 75%; left: 55%; background-position: 50% 250%; background-size: 105%;" disabled></button>
+        </div>
+        <div class="row-nine">           
+            <button class="active-btn skill" id="btn29" style="background-image: url(./images/air-strike.png); position: absolute; top: 85%; left: 50%; background-position: 50% 50%; background-size: 115%;" disabled></button>
+            <button class="passive-btn skill" id="btn30" style="background-image: url(./images/barrage.png); position: absolute; top: 85%; left: 75%; background-position: 50% 160%; background-size: 105%;"></button>
+        </div>
+        <div class="row-ten">
+            <img class="enveus-logo" src="./images/WhiteDiscordLogo.png"></img>
+            <h1 class="enveus">Powered By Enveus</h1>
+        </div>
+             <svg class="svg-container" viewBox="0 0 1250 750">
+                <defs>
+                    <marker
+                        id="arrow-right"
+                        viewBox="0 0 5 5" 
+                        refX="2.5"
+                        refY="2.5"
+                        markerWidth="10" 
+                        markerHeight="10" 
+                        orient="auto-start-reverse">
+                        <path d="M 0 0 L 5 2.5 L 0 5 L 1 2.5 Z" fill="#d5ac52" /> 
+                    </marker>
+                </defs>
+               
+                <path
+                id='arrow-line'
+                marker-end='url(#arrow-right)'
+                stroke-width='1'
+                fill='none' stroke="#d5ac52" 
+                d='M665,132.5 L745,132.5'
+                />
+                <path
+                id='arrow-line2'
+                marker-start='url(#arrow-right)'
+                stroke-width='1'
+                fill='none' stroke="#d5ac52" 
+                d='M545,132.5 L625,132.5'
+                />
+                <path
+                id='arrow-line3'
+                marker-end='url(#arrow-right)'
+                stroke-width='1'
+                fill='none' stroke="#d5ac52" 
+                d='M770,112.5 L770,82.5'
+                />
+                <path
+                id='arrow-line4'
+                marker-end='url(#arrow-right)'
+                stroke-width='1'
+                fill='none' stroke="#d5ac52" 
+                d='M520,120 L520,82.5'
+                />
+                <path
+                id='arrow-line-curved1'
+                marker-end='url(#arrow-right)'
+                stroke-width='1'
+                fill='none' stroke="#d5ac52" 
+                d='M395,187.5 L395,132.5 L495,132.5'
+                />
+                <path
+                id='arrow-line5'
+                marker-start='url(#arrow-right)'
+                stroke-width='1'
+                fill='none' stroke="#d5ac52" 
+                d='M420,207.5 L437.5,207.5'
+                />
+                <path
+                id='arrow-line6'
+                marker-end='url(#arrow-right)'
+                stroke-width='1'
+                fill='none' stroke="#d5ac52" 
+                d='M645,187.5 L645,157.5'
+                />
+                <path
+                id='arrow-line-curved2'
+                marker-end='url(#arrow-right)'
+                stroke-width='1'
+                fill='none' stroke="#d5ac52" 
+                d='M895,187.5 L895,132.5 L795,132.5'
+                />
+                <path
+                id='arrow-line7'
+                marker-end='url(#arrow-right)'
+                stroke-width='1'
+                fill='none' stroke="#d5ac52" 
+                d='M852.5,207.5 L870,207.5'
+                />
+                <path
+                id='arrow-line8'
+                marker-end='url(#arrow-right)'
+                stroke-width='1'
+                fill='none' stroke="#d5ac52" 
+                d='M582.5,262.5 L582.5,232.5'
+                />
+                <path
+                id='arrow-line9'
+                marker-end='url(#arrow-right)'
+                stroke-width='1'
+                fill='none' stroke="#d5ac52" 
+                d='M707.5,262.5 L707.5,232.5'
+                />
+                <path
+                id='arrow-tree1'
+                marker-end='url(#arrow-right)'
+                marker-start='url(#arrow-right)'
+                stroke-width='1'
+                fill='none' stroke="#d5ac52" 
+                d='M457.5,332.5 L457.5,282.5 L500,282.5 L457.5,282.5 L457.5,232.5'
+                />
+                <path
+                id='arrow-tree2'
+                marker-end='url(#arrow-right)'
+                marker-start='url(#arrow-right)'
+                stroke-width='1'
+                fill='none' stroke="#d5ac52" 
+                d='M832.5,332.5 L832.5,282.5 L790,282.5 L832.5,282.5 L832.5,232.5'
+                />
+                <path
+                id='arrow-line10'
+                marker-end='url(#arrow-right)'
+                stroke-width='1'
+                fill='none' stroke="#d5ac52" 
+                d='M562.5,282.5 545,282.5'
+                />
+                <path
+                id='arrow-line11'
+                marker-end='url(#arrow-right)'
+                stroke-width='1'
+                fill='none' stroke="#d5ac52" 
+                d='M727.5,282.5 745,282.5'
+                />
+                <path
+                id='arrow-line12'
+                marker-start='url(#arrow-right)'
+                stroke-width='1'
+                fill='none' stroke="#d5ac52" 
+                d='M357.5,357.5 L375,357.5'
+                />
+                <path
+                id='arrow-line13'
+                marker-start='url(#arrow-right)'
+                stroke-width='1'
+                fill='none' stroke="#d5ac52" 
+                d='M420,357.5 L437.5,357.5'
+                />
+                <path
+                id='arrow-line14'
+                marker-start='url(#arrow-right)'
+                stroke-width='1'
+                fill='none' stroke="#d5ac52" 
+                d='M582.5,332.5 L582.5,302.5'
+                />
+                <path
+                id='arrow-line15'
+                marker-start='url(#arrow-right)'
+                stroke-width='1'
+                fill='none' stroke="#d5ac52" 
+                d='M707.5,332.5 L707.5,302.5'
+                />
+                <path
+                id='arrow-line16'
+                marker-end='url(#arrow-right)'
+                stroke-width='1'
+                fill='none' stroke="#d5ac52" 
+                d='M852.5,357.5 L870,357.5'
+                />
+                <path
+                id='arrow-line17'
+                marker-end='url(#arrow-right)'
+                stroke-width='1'
+                fill='none' stroke="#d5ac52" 
+                d='M915,357.5 L932.5,357.5'
+                />
+                <path
+                id='arrow-line18'
+                marker-start='url(#arrow-right)'
+                stroke-width='1'
+                fill='none' stroke="#d5ac52" 
+                d='M395,407.5 L395,377.5'
+                />
+                <path
+                id='arrow-line19'
+                marker-start='url(#arrow-right)'
+                stroke-width='1'
+                fill='none' stroke="#d5ac52" 
+                d='M607.5,432.5 L625,432.5'
+                />
+                <path
+                id='arrow-line20'
+                marker-end='url(#arrow-right)'
+                stroke-width='1'
+                fill='none' stroke="#d5ac52" 
+                d='M665.5,432.5 L682.5,432.5'
+                />
+                <path
+                id='arrow-line21'
+                marker-end='url(#arrow-right)'
+                stroke-width='1'
+                fill='none' stroke="#d5ac52" 
+                d='M645,452.5 L645,482.5'
+                />
+                <path
+                id='arrow-line22'
+                marker-end='url(#arrow-right)'
+                stroke-width='1'
+                fill='none' stroke="#d5ac52" 
+                d='M895,377.5 L895,407.5'
+                />
+                <path
+                id='arrow-line-curved3'
+                marker-end='url(#arrow-right)'
+                stroke-width='1'
+                fill='none' stroke="#d5ac52" 
+                d='M625,507.5 L582.5,507.5 L582.5,557.5'
+                />
+                <path
+                id='arrow-line-curved4'
+                marker-end='url(#arrow-right)'
+                stroke-width='1'
+                fill='none' stroke="#d5ac52" 
+                d='M665,507.5 L707.5,507.5 L707.5,557.5'
+                />
+                <path
+                id='arrow-tree3'
+                marker-end='url(#arrow-right)'
+                stroke-width='1'
+                fill='none' stroke="#d5ac52" 
+                d='M602.5,582.5 L687.5,582.5 L645,582.5 L645,632.5'
+                />
+                
+
+
+            </svg>       
+        </div>
+        <div class="zoom-btn-container">
+            <button class="zoom-btn" onclick="zoomIn()">Zoom In</button>
+            <button class="zoom-btn" onclick="zoomOut()">Zoom Out</button>
+        </div>   
+    </div>
+    <div class="footer" id="class-footer">
+        <div class="labels-container">
+        <label>Talent Points Available: </label>
+        <label id="talent-points">x/46</label>
+        </div>
+        <div class="buttons-container">
+        <button class="undo-btn">Undo</button>
+        <button class="revert-btn">Revert All Changes</button>
+        <button class="confirm-btn">Confirm Choices</button>
+        </div>
+    </div>
+
+    <div class="talents-container" id="weapon-content">
+        <div class="talents-box">
+            <div class="row-container">
+                <div class="column1">
+                    <button class="passive-btn" style="background-image: url(./images/keen-edge-passive.png); background-position: 50% 50%; background-size: 120%;"></button>
+                    <span class="up-arrow-short">&#8593;</span>
+                    <button class="passive-btn" style="background-image: url(./images/keen-edge-passive.png); background-position: 50% 50%;  background-size: 120%;"></button>
+                    <span class="up-arrow-short">&#8593;</span>
+                    <button class="passive-btn" style="background-image: url(./images/keen-edge-passive.png); background-position: 50% 50%;  background-size: 120%;"></button>
+                    <span class="up-arrow-short">&#8593;</span>
+                    <button class="passive-btn" style="background-image: url(./images/keen-edge-passive.png); background-position: 50% 50%;  background-size: 120%;"></button>
+                    <span class="up-arrow-short">&#8593;</span>
+                    <button class="passive-btn" style="background-image: url(./images/keen-edge-passive.png); background-position: 50% 50%; background-size: 120%;"></button>
+                    <span class="up-arrow-short">&#8593;</span>
+                    <button class="passive-btn" style="background-image: url(./images/keen-edge-passive.png); background-position: 50% 50%; background-size: 120%;"></button>
+                    <span class="up-arrow-short">&#8593;</span>
+                    <button class="passive-btn" style="background-image: url(./images/keen-edge-passive.png); background-position: 50% 50%;  background-size: 120%;"></button>
+                    <span class="up-arrow-short">&#8593;</span>
+                    <button class="passive-btn" style="background-image: url(./images/keen-edge-passive.png); background-position: 50% 50%;  background-size: 120%;"></button>
+                    <span class="up-arrow-short">&#8593;</span>
+                    <button class="passive-btn" style="background-image: url(./images/keen-edge-passive.png); background-position: 50% 50%; background-size: 120%;"></button>
+                    <span class="up-arrow-short">&#8593;</span>
+                    <button class="passive-btn" style="background-image: url(./images/keen-edge-passive.png);  background-position: 50% 50%; background-size: 120%;"></button>
+                </div>
+                <div class="column2">
+                    <button class="passive-btn" style="background-image: url(./images/combo-passive.png);  background-position: 50% 50%;"></button>
+                    <span class="up-arrow-short">&#8593;</span>
+                    <button class="passive-btn" style="background-image: url(./images/combo-passive.png);  background-position: 50% 50%;"></button>
+                    <span class="up-arrow-short">&#8593;</span>
+                    <button class="passive-btn" style="background-image: url(./images/combo-passive.png);  background-position: 50% 50%;"></button>
+                    <span class="up-arrow-short">&#8593;</span>
+                    <button class="passive-btn" style="background-image: url(./images/combo-passive.png);  background-position: 50% 50%;"></button>
+                    <span class="up-arrow-short">&#8593;</span>
+                    <button class="passive-btn" style="background-image: url(./images/combo-passive.png);  background-position: 50% 50%;"></button>
+                    <span class="up-arrow-short">&#8593;</span>
+                    <button class="passive-btn" style="background-image: url(./images/combo-passive.png);  background-position: 50% 50%;"></button>
+                    <span class="up-arrow-short">&#8593;</span>
+                    <button class="passive-btn" style="background-image: url(./images/combo-passive.png);  background-position: 50% 50%;"></button>
+                    <span class="up-arrow-short">&#8593;</span>
+                    <button class="passive-btn" style="background-image: url(./images/combo-passive.png);  background-position: 50% 50%;"></button>
+                    <span class="up-arrow-short">&#8593;</span>
+                    <button class="passive-btn" style="background-image: url(./images/combo-passive.png);  background-position: 50% 50%;"></button>
+                    <span class="up-arrow-short">&#8593;</span>
+                    <button class="passive-btn" style="background-image: url(./images/combo-passive.png);  background-position: 50% 50%;"></button>
+                    
+                   
+
+                </div>
+                <div class="column3">
+                    <button class="passive-btn" style="background-image: url(./images/shortbow-passive4.png); background-position: 50% 80%; background-size: 135%;"></button>
+                    <span class="up-arrow">&#8593;</span>
+                    <button class="passive-btn" style="background-image: url(./images/shortbow-passive3.png); background-position: 50% 85%; background-size: 150%;"></button>
+                    <span class="up-arrow">&#8593;</span>
+                    <button class="passive-btn" style="background-image: url(./images/shortbow-passive2.png); background-position: 50% 75%; background-size: 152%;"></button>
+                    <span class="up-arrow">&#8593;</span>
+                    <button class="passive-btn" style="background-image: url(./images/shortbow-passive.png); background-position: 50% 80%; background-size: 140%;"></button>
+                    
+                </div>
+            </div>
+        </div>
+        <div class="zoom-btn-container">
+            <button class="zoom-btn" onclick="zoomIn()">Zoom In</button>
+            <button class="zoom-btn" onclick="zoomOut()">Zoom Out</button>
+        </div>
+    </div>
+    <div class="footer" id="weapon-footer">
+        <div class="labels-container">
+            <label>Talent Points Available: </label>
+            <label id="talent-points">x/15</label>
+            </div>
+        <div class="buttons-container">
+        <button class="undo-btn">Undo</button>
+        <button class="revert-btn">Revert All Changes</button>
+        <button class="confirm-btn">Confirm Choices</button>
+        </div>
+    </div>
+
+    <div class="talents-container" id="secondary-content">
+        <div class="talents-box" >
+            <label> this is in the secondary tab</label>
+        </div>
+        <div class="zoom-btn-container">
+            <button class="zoom-btn" onclick="zoomIn()">Zoom In</button>
+            <button class="zoom-btn" onclick="zoomOut()">Zoom Out</button>
+        </div>
+    </div>
+    <div class="footer" id="secondary-footer">
+        <div class="labels-container">
+            <label>Talent Points Available: </label>
+            <label id="talent-points">x/y</label>
+            </div>
+        <div class="buttons-container">
+        <button class="undo-btn">Undo</button>
+        <button class="revert-btn">Revert All Changes</button>
+        <button class="confirm-btn">Confirm Choices</button>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    let isDragging = false;
+    let dragStartX, dragStartY;
+    let translateX = 0;
+    let translateY = 0;
+    let scale = 1;
+  
+    let activeTab = 'class'; // Default active tab
+    let connections = [];
+  
+    function setActiveTab(tabName) {
+      activeTab = tabName;
+    }
+  
+    function resetTransform() {
+      translateX = 0;
+      translateY = 0;
+      scale = 1;
+      applyTransform();
+    }
+  
+    function getActiveContainer() {
+      return document.getElementById(activeTab + '-content').querySelector('.talents-box');
+    }
+  
+    function updateZoomContainer() {
+      const talentsBox = getActiveContainer();
+      zoomContainer = talentsBox;
+      containerRect = talentsBox.getBoundingClientRect();
+    }
+  
+    function applyTransform() {
+      scale = Math.min(2, Math.max(1, scale));
+      const talentsBox = getActiveContainer();
+      talentsBox.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+    }
+  
+    function zoomIn() {
+      scale += 0.25;
+      applyTransform();
+    }
+  
+    function zoomOut() {
+      if (scale > 1) {
+        scale -= 0.25;
+        applyTransform();
+      }
+    }
+  
+    document.addEventListener('mousedown', (e) => {
+      const talentsBox = getActiveContainer();
+      talentsBox.classList.add("draggable");
+      const isDraggable = e.target.classList.contains('draggable');
+      const isChildOfTalentsBox = talentsBox.contains(e.target);
+  
+      if (isDraggable && isChildOfTalentsBox) {
+        isDragging = true;
+        dragStartX = e.clientX;
+        dragStartY = e.clientY;
+        talentsBox.classList.add('grabbing');
+      }
+    });
+  
+    document.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      const talentsBox = getActiveContainer();
+      const deltaX = e.clientX - dragStartX;
+      const deltaY = e.clientY - dragStartY;
+  
+      translateX += deltaX / scale;
+      translateY += deltaY / scale;
+  
+      talentsBox.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+  
+      dragStartX = e.clientX;
+      dragStartY = e.clientY;
+    });
+  
+    document.addEventListener('mouseup', () => {
+      isDragging = false;
+      const talentsBox = getActiveContainer();
+      if (talentsBox) {
+        talentsBox.classList.remove('grabbing');
+      }
+    });
+  
+    function showContent(tabName) {
+      setActiveTab(tabName);
+      resetTransform(); // Reset zoom level and position to default
+  
+      var i;
+      var tabs = document.getElementsByClassName("tab-btn");
+      for (i = 0; i < tabs.length; i++) {
+        tabs[i].style.backgroundColor = "";
+      }
+  
+      var contentDivs = document.getElementsByClassName("talents-container");
+      for (i = 0; i < contentDivs.length; i++) {
+        contentDivs[i].style.display = "none";
+      }
+  
+      var footerDivs = document.getElementsByClassName("footer");
+      for (i = 0; i < footerDivs.length; i++) {
+        footerDivs[i].style.display = "none";
+      }
+  
+      document.getElementById(tabName + "-content").style.display = "block";
+      document.getElementById(tabName + "-footer").style.display = "flex";
+  
+      updateZoomContainer(); // Update zoom container when switching tabs
+      applyTransform(); // Apply the transform when switching tabs
+    }
+
+
+
+     // Let's get all of the buttons so we can set them up with event listeners
+        // and create their nodes.
+        let buttons = document.querySelectorAll("button");
+
+        console.log(buttons);
+
+        // This will hold all of the nodes so we can look them up by their ID
+        let buttonNodes = {};
+
+        // This will define all of the edges in the digraph.
+        // The only thing that will make it a true digraph is if this is defined correctly.
+        // First item in each list is a node.
+        // Second item is the list of nodes that should be added to the first node as children.
+        let buttonEdges = new Map([
+            ["startbtn1", ["btn1", "btn2", "btn3"]],
+            ["btn1", ["btn4", "btn5"]],
+            ["btn5", ["btn6"]],
+            ["btn6", ["btn7"]],
+            ["btn7", ["btn8"]],
+            ["btn4", ["btn9"]],
+            ["btn9", ["btn10", "btn11"]],
+            ["startbtn3", ["btn23"]],
+            ["btn23", ["btn7"]]
+        ]);
+
+        // Let's setup the buttons
+        for (let button of buttons) {
+            // Create the node for the button
+            buttonNodes[button.id] = new Node(button.id);
+            // Allow toggling each button to an active state for testing (probably want some rules here for determining whether a button can actually be activated)
+            button.addEventListener("click", (e) => {
+                // Toggle the active class for the clicked button
+                e.target.classList.add('selected');
+                e.target.classList.remove('selectable');
+
+                // Retrieve the children of the clicked button from the buttonEdges map
+                const childrenIds = buttonEdges.get(e.target.id);
+                console.log(childrenIds);
+                // Update the style for each child button to yellow and enable the button
+                if (childrenIds) {
+                    childrenIds.forEach(childId => {
+                        const childButton = document.getElementById(childId);
+                        if (childButton) {
+                            console.log(childButton);
+                            childButton.classList.add('selectable');
+                            childButton.disabled = false;
+                        }
+                    });
+                }
+            });
+
+
+
+            // Run the demo starting from the node clicked when a user right clicks a node
+            button.addEventListener("contextmenu", (e) => {
+            // Stop context menu from popping up
+            e.preventDefault();
+
+            // Remove the 'selected' class from the clicked button
+            e.target.classList.remove('selected');
+            // Save the button being clicked
+            const clickedButtonID = e.target.id;
+        // Here we start the search from the node clicked and give it the base case handler and node action handler methods
+            actionSearch(buttonNodes[e.target.id], stillHasValidPath,(node) => deactivateButton(node, clickedButtonID));
+    });
+        }
+        // Here we will setup all of the relationships between the nodes in the digraph
+        for (let [buttonId, buttonEdgeIds] of buttonEdges) {
+            // Here we are going through each node and their defined children (see Map defined above) and adding them with the addChild method
+            for (let buttonEdgeId of buttonEdgeIds) {
+                buttonNodes[buttonId].addChild(buttonNodes[buttonEdgeId]);
+            }
+        }
+
+      // Start the view on the class tree
+    showContent("class");
+  
+  </script>
+  
+</html>
+</html>
+
