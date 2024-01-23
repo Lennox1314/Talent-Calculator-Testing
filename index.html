@@ -283,8 +283,8 @@
         }
 
         .selected{
-          opacity: 1;
-          filter: brightness(150%);
+          opacity: 1 !important;
+          filter: brightness(150%) !important;
         }
         .selectable{
           opacity: .7;
@@ -593,12 +593,12 @@
     <div class="footer" id="class-footer">
         <div class="labels-container">
         <label>Talent Points Available: </label>
-        <label id="talent-points">x/46</label>
+        <label id="class-talent-points"></label>
         </div>
         <div class="buttons-container">
-        <button class="undo-btn">Undo</button>
-        <button class="revert-btn">Revert All Changes</button>
-        <button class="confirm-btn">Confirm Choices</button>
+        <button id="class-undo-btn" class="undo-btn">Undo</button>
+        <button id="class-revert-btn" class="revert-btn">Revert All Changes</button>
+        <button id="class-confirm-btn" class="confirm-btn">Save Choices</button>
         </div>
     </div>
 
@@ -670,12 +670,12 @@
     <div class="footer" id="weapon-footer">
         <div class="labels-container">
             <label>Talent Points Available: </label>
-            <label id="talent-points">x/15</label>
+            <label id="weapon-talent-points"></label>
             </div>
         <div class="buttons-container">
         <button class="undo-btn">Undo</button>
         <button class="revert-btn">Revert All Changes</button>
-        <button class="confirm-btn">Confirm Choices</button>
+        <button class="confirm-btn">Save Choices</button>
         </div>
     </div>
 
@@ -707,6 +707,9 @@
     let translateX = 0;
     let translateY = 0;
     let scale = 1;
+    let talentCount = 0;
+    let selectedButtons = [];
+    let history = [];  // Array to store the history of changes
   
     let activeTab = 'class'; // Default active tab
     let connections = [];
@@ -818,9 +821,7 @@
 
      // Let's get all of the buttons so we can set them up with event listeners
         // and create their nodes.
-        let buttons = document.querySelectorAll("button");
-
-        console.log(buttons);
+        let buttons = document.querySelectorAll(".skill");
 
         // This will hold all of the nodes so we can look them up by their ID
         let buttonNodes = {};
@@ -859,18 +860,24 @@
             // Allow toggling each button to an active state for testing (probably want some rules here for determining whether a button can actually be activated)
             button.addEventListener("click", (e) => {
                 // Toggle the active class for the clicked button
+                if(!e.target.classList.contains('selected')){
+                  talentCount += 1;
+                  updateTalentCount();
+                }
                 e.target.classList.add('selected');
                 e.target.classList.remove('selectable');
+                selectedButtons.push(e.target.id);
+                updateHistory(e.target.id, 'select');
+
+               
 
                 // Retrieve the children of the clicked button from the buttonEdges map
                 const childrenIds = buttonEdges.get(e.target.id);
-                console.log(childrenIds);
                 // Update the style for each child button to yellow and enable the button
                 if (childrenIds) {
                     childrenIds.forEach(childId => {
                         const childButton = document.getElementById(childId);
-                        if (childButton) {
-                            console.log(childButton);                 
+                        if (childButton) {           
                             childButton.disabled = false;
                             if(!childButton.classList.contains('selected')){
                                childButton.classList.add('selectable');
@@ -886,9 +893,15 @@
             button.addEventListener("contextmenu", (e) => {
             // Stop context menu from popping up
             e.preventDefault();
+            if(e.target.classList.contains('selected')){
+              talentCount -= 1;
+              updateTalentCount();
+            }
 
             // Remove the 'selected' class from the clicked button
             e.target.classList.remove('selected');
+            updateHistory(e.target.id, 'unselect');
+            selectedButtons.splice(e.target.id);
             // Save the button being clicked
             const clickedButtonID = e.target.id;
         // Here we start the search from the node clicked and give it the base case handler and node action handler methods
@@ -903,11 +916,99 @@
             }
         }
 
+       // Updates the display for the talents use/available
+        function updateTalentCount() {
+          document.getElementById("class-talent-points").innerHTML = `&nbsp;${talentCount} / 46`;
+        }
+
+        function updateHistory(buttonId, action) {
+            history.push({ buttonId, action });
+        }
+
+        function undo() {
+          if (history.length > 0) {
+              const lastChange = history.pop();
+              const { buttonId, action } = lastChange;
+
+              const button = document.getElementById(buttonId);
+              if (button) {
+                  if (action === 'select') {
+                      talentCount -= 1;
+                      updateTalentCount();
+                      button.classList.remove('selected');
+                      selectedButtons = selectedButtons.filter(id => id !== buttonId);
+                  } else if (action === 'unselect') {
+                      talentCount += 1;
+                      updateTalentCount();
+                      button.classList.add('selected');
+                      selectedButtons.push(buttonId);
+                  }
+
+                  // Revert changes for children as well (similar to your original logic)
+                  const childrenIds = buttonEdges.get(buttonId);
+                  if (childrenIds) {
+                      childrenIds.forEach(childId => {
+                          const childButton = document.getElementById(childId);
+                          if (childButton) {
+                              if (action === 'select') {
+                                  childButton.classList.remove('selectable');
+                                  childButton.disabled = true;
+                              } else if (action === 'unselect') {
+                                  childButton.disabled = false;
+                                  if(!childButton.classList.contains("selected")){
+                                  childButton.classList.add('selectable');
+                                  }
+                              }
+                          }
+                      });
+                  }
+              }
+          }
+      }
+      // Calls undo on button click
+      document.getElementById("class-undo-btn").addEventListener('click', undo);
+
+      function revertAll() {
+        for (let button of buttons) {
+        button.classList.remove('selectable');
+        button.classList.remove('selected');
+        if(!button.id.startsWith('s'))
+        button.disabled = true;
+        }
+        talentCount = 0;
+        updateTalentCount();
+        history = [];
+      }
+
+
+        // Function to generate a UID based on the selected buttons (Base64-encoded)
+      function generateUID(selectedButtons) {
+          const uidString = selectedButtons.sort().join('-');
+          const base64UID = btoa(uidString);
+          console.log(base64UID);
+          return base64UID;
+      }
+
+
+      document.getElementById('class-confirm-btn').addEventListener('click', function() {
+        const uid = generateUID(selectedButtons);
+        // Do something with the generated UID
+        console.log(uid);
+    });
+
+
+      document.getElementById('class-revert-btn').addEventListener('click', revertAll);
       // Start the view on the class tree
     showContent("class");
+    // Inital display of used talents....try to find a better way if i can
+    document.getElementById("class-talent-points").innerHTML = `&nbsp;${talentCount} / 46`;
+
+
   
   </script>
   
 </html>
 </html>
+
+
 
