@@ -364,7 +364,17 @@
              <svg class="svg-container" viewBox="0 0 1250 750">
                 <defs>
                     <marker
-                        id="arrow-right"
+                        id="arrow-right-white"
+                        viewBox="0 0 5 5" 
+                        refX="2.5"
+                        refY="2.5"
+                        markerWidth="10" 
+                        markerHeight="10" 
+                        orient="auto-start-reverse">
+                        <path d="M 0 0 L 5 2.5 L 0 5 L 1 2.5 Z" fill="gray" /> 
+                    </marker>
+                    <marker
+                        id="arrow-right-orange"
                         viewBox="0 0 5 5" 
                         refX="2.5"
                         refY="2.5"
@@ -376,208 +386,210 @@
                 </defs>
                
                 <path
-                id='arrow-line'
-                marker-end='url(#arrow-right)'
+                id='arrow-line1'
+                marker-end='url(#arrow-right-white)'
                 stroke-width='1'
-                fill='none' stroke="#d5ac52" 
+                fill='none' stroke="gray" 
                 d='M665,132.5 L745,132.5'
                 />
                 <path
                 id='arrow-line2'
-                marker-start='url(#arrow-right)'
+                marker-start='url(#arrow-right-white)'
                 stroke-width='1'
-                fill='none' stroke="#d5ac52" 
+                fill='none' stroke="gray" 
                 d='M545,132.5 L625,132.5'
                 />
                 <path
                 id='arrow-line3'
-                marker-end='url(#arrow-right)'
+                marker-end='url(#arrow-right-white)'
                 stroke-width='1'
-                fill='none' stroke="#d5ac52" 
+                fill='none' stroke="gray" 
                 d='M770,112.5 L770,82.5'
                 />
                 <path
                 id='arrow-line4'
-                marker-end='url(#arrow-right)'
+                marker-end='url(#arrow-right-white)'
                 stroke-width='1'
-                fill='none' stroke="#d5ac52" 
+                fill='none' stroke="gray" 
                 d='M520,120 L520,82.5'
                 />
                 <path
                 id='arrow-line-curved1'
-                marker-end='url(#arrow-right)'
+                marker-end='url(#arrow-right-white)'
                 stroke-width='1'
-                fill='none' stroke="#d5ac52" 
+                fill='none' stroke="gray" 
                 d='M395,187.5 L395,132.5 L495,132.5'
                 />
                 <path
                 id='arrow-line5'
-                marker-start='url(#arrow-right)'
+                marker-start='url(#arrow-right-white)'
                 stroke-width='1'
-                fill='none' stroke="#d5ac52" 
+                fill='none' stroke="gray" 
                 d='M420,207.5 L437.5,207.5'
                 />
                 <path
                 id='arrow-line6'
-                marker-end='url(#arrow-right)'
+                marker-end='url(#arrow-right-white)'
                 stroke-width='1'
-                fill='none' stroke="#d5ac52" 
+                fill='none' stroke="gray" 
                 d='M645,187.5 L645,157.5'
                 />
                 <path
                 id='arrow-line-curved2'
-                marker-end='url(#arrow-right)'
+                marker-end='url(#arrow-right-white)'
                 stroke-width='1'
-                fill='none' stroke="#d5ac52" 
+                fill='none' stroke="gray" 
                 d='M895,187.5 L895,132.5 L795,132.5'
                 />
                 <path
                 id='arrow-line7'
-                marker-end='url(#arrow-right)'
+                marker-end='url(#arrow-right-white)'
                 stroke-width='1'
-                fill='none' stroke="#d5ac52" 
+                fill='none' stroke="gray" 
                 d='M852.5,207.5 L870,207.5'
                 />
                 <path
                 id='arrow-line8'
-                marker-end='url(#arrow-right)'
+                marker-end='url(#arrow-right-white)'
                 stroke-width='1'
-                fill='none' stroke="#d5ac52" 
+                fill='none' stroke="gray" 
                 d='M582.5,262.5 L582.5,232.5'
                 />
                 <path
                 id='arrow-line9'
-                marker-end='url(#arrow-right)'
+                marker-end='url(#arrow-right-white)'
                 stroke-width='1'
-                fill='none' stroke="#d5ac52" 
+                fill='none' stroke="gray" 
                 d='M707.5,262.5 L707.5,232.5'
                 />
                 <path
                 id='arrow-tree1'
-                marker-end='url(#arrow-right)'
-                marker-start='url(#arrow-right)'
+                marker-end='url(#arrow-right-white)'
+                marker-start='url(#arrow-right-white)'
                 stroke-width='1'
-                fill='none' stroke="#d5ac52" 
+                fill='none' stroke="gray" 
                 d='M457.5,332.5 L457.5,282.5 L500,282.5 L457.5,282.5 L457.5,232.5'
                 />
                 <path
                 id='arrow-tree2'
-                marker-end='url(#arrow-right)'
-                marker-start='url(#arrow-right)'
+                marker-end='url(#arrow-right-white)'
+                marker-start='url(#arrow-right-white)'
                 stroke-width='1'
-                fill='none' stroke="#d5ac52" 
+                fill='none' stroke="gray" 
                 d='M832.5,332.5 L832.5,282.5 L790,282.5 L832.5,282.5 L832.5,232.5'
                 />
-                <path
-                id='arrow-line10'
-                marker-end='url(#arrow-right)'
+                <!-- start here on 10         #d5ac52 (orangeish color)    -->
+                <path 
+                id='arrow-line10' 
+                marker-end='url(#arrow-right-white)'
                 stroke-width='1'
-                fill='none' stroke="#d5ac52" 
+                fill='none' stroke="gray" 
                 d='M562.5,282.5 545,282.5'
+                
                 />
                 <path
                 id='arrow-line11'
-                marker-end='url(#arrow-right)'
+                marker-end='url(#arrow-right-white)'
                 stroke-width='1'
-                fill='none' stroke="#d5ac52" 
+                fill='none' stroke="gray" 
                 d='M727.5,282.5 745,282.5'
                 />
                 <path
                 id='arrow-line12'
-                marker-start='url(#arrow-right)'
+                marker-start='url(#arrow-right-white)'
                 stroke-width='1'
-                fill='none' stroke="#d5ac52" 
+                fill='none' stroke="gray" 
                 d='M357.5,357.5 L375,357.5'
                 />
                 <path
                 id='arrow-line13'
-                marker-start='url(#arrow-right)'
+                marker-start='url(#arrow-right-white)'
                 stroke-width='1'
-                fill='none' stroke="#d5ac52" 
+                fill='none' stroke="gray" 
                 d='M420,357.5 L437.5,357.5'
                 />
                 <path
                 id='arrow-line14'
-                marker-start='url(#arrow-right)'
+                marker-start='url(#arrow-right-white)'
                 stroke-width='1'
-                fill='none' stroke="#d5ac52" 
+                fill='none' stroke="gray" 
                 d='M582.5,332.5 L582.5,302.5'
                 />
                 <path
                 id='arrow-line15'
-                marker-start='url(#arrow-right)'
+                marker-start='url(#arrow-right-white)'
                 stroke-width='1'
-                fill='none' stroke="#d5ac52" 
+                fill='none' stroke="gray" 
                 d='M707.5,332.5 L707.5,302.5'
                 />
                 <path
                 id='arrow-line16'
-                marker-end='url(#arrow-right)'
+                marker-end='url(#arrow-right-white)'
                 stroke-width='1'
-                fill='none' stroke="#d5ac52" 
+                fill='none' stroke="gray" 
                 d='M852.5,357.5 L870,357.5'
                 />
                 <path
                 id='arrow-line17'
-                marker-end='url(#arrow-right)'
+                marker-end='url(#arrow-right-white)'
                 stroke-width='1'
-                fill='none' stroke="#d5ac52" 
+                fill='none' stroke="gray" 
                 d='M915,357.5 L932.5,357.5'
                 />
                 <path
                 id='arrow-line18'
-                marker-start='url(#arrow-right)'
+                marker-start='url(#arrow-right-white)'
                 stroke-width='1'
-                fill='none' stroke="#d5ac52" 
+                fill='none' stroke="gray" 
                 d='M395,407.5 L395,377.5'
                 />
                 <path
                 id='arrow-line19'
-                marker-start='url(#arrow-right)'
+                marker-start='url(#arrow-right-white)'
                 stroke-width='1'
-                fill='none' stroke="#d5ac52" 
+                fill='none' stroke="gray" 
                 d='M607.5,432.5 L625,432.5'
                 />
                 <path
                 id='arrow-line20'
-                marker-end='url(#arrow-right)'
+                marker-end='url(#arrow-right-white)'
                 stroke-width='1'
-                fill='none' stroke="#d5ac52" 
+                fill='none' stroke="gray" 
                 d='M665.5,432.5 L682.5,432.5'
                 />
                 <path
                 id='arrow-line21'
-                marker-end='url(#arrow-right)'
+                marker-end='url(#arrow-right-white)'
                 stroke-width='1'
-                fill='none' stroke="#d5ac52" 
+                fill='none' stroke="gray" 
                 d='M645,452.5 L645,482.5'
                 />
                 <path
                 id='arrow-line22'
-                marker-end='url(#arrow-right)'
+                marker-end='url(#arrow-right-white)'
                 stroke-width='1'
-                fill='none' stroke="#d5ac52" 
+                fill='none' stroke="gray" 
                 d='M895,377.5 L895,407.5'
                 />
                 <path
                 id='arrow-line-curved3'
-                marker-end='url(#arrow-right)'
+                marker-end='url(#arrow-right-white)'
                 stroke-width='1'
-                fill='none' stroke="#d5ac52" 
+                fill='none' stroke="gray" 
                 d='M625,507.5 L582.5,507.5 L582.5,557.5'
                 />
                 <path
                 id='arrow-line-curved4'
-                marker-end='url(#arrow-right)'
+                marker-end='url(#arrow-right-white)'
                 stroke-width='1'
-                fill='none' stroke="#d5ac52" 
+                fill='none' stroke="gray" 
                 d='M665,507.5 L707.5,507.5 L707.5,557.5'
                 />
                 <path
                 id='arrow-tree3'
-                marker-end='url(#arrow-right)'
+                marker-end='url(#arrow-right-white)'
                 stroke-width='1'
-                fill='none' stroke="#d5ac52" 
+                fill='none' stroke="gray" 
                 d='M602.5,582.5 L687.5,582.5 L645,582.5 L645,632.5'
                 />
                 
@@ -852,6 +864,31 @@
             ["btn27", ["btn29"]],
             ["btn28", ["btn29"]]
         ]);
+        // This is create a similar dynamic but for the svg arrows connecting each button
+        // First item is the node
+        // Second item(s) are the arrows that come off of that node
+        let arrowMap = new Map([
+            ["startbtn1", ["arrow-line8", "arrow-line10", "arrow-line14"]],
+            ["startbtn2", ["arrow-line9", "arrow-line11", "arrow-line15"]],
+            ["startbtn3", ["arrow-line6"]],
+            ['startbtn4',["arrow-line19", "arrow-line20", "arrow-line21"]],
+            ["btn1", ["arrow-tree1"]],
+            ["btn4", ["arrow-line13"]],
+            ["btn5", ["arrow-line5"]],
+            ["btn6", ["arrow-line-curved1"]],
+            ["btn7", ["arrow-line4"]],
+            ["btn9", ["arrow-line12", "arrow-line18"]],
+            ["btn12", ["arrow-tree2"]],
+            ["btn15", ["arrow-line16"]],
+            ["btn16", ["arrow-line7"]],
+            ["btn17", ["arrow-line-curved2"]],
+            ["btn18", ["arrow-line3"]],
+            ["btn20", ["arrow-line17", "arrow-line22"]],
+            ["btn23", ["arrow-line1", "arrow-line2"]],
+            ["btn26", ["arrow-line-curved3", "arrow-line-curved4"]],
+            ["btn27", ["arrow-tree3"]],
+            ["btn28", ["arrow-tree3"]]
+        ]);
 
         // Let's setup the buttons
         for (let button of buttons) {
@@ -873,6 +910,18 @@
 
                 // Retrieve the children of the clicked button from the buttonEdges map
                 const childrenIds = buttonEdges.get(e.target.id);
+
+                const arrows = arrowMap.get(e.target.id);
+                for(let arrow of arrows) {
+                    let arrowid = document.getElementById(arrow);
+                    arrowid.setAttribute("stroke", "#d5ac52");
+                    if(arrowid.hasAttribute("marker-start")){
+                    arrowid.setAttribute("marker-start", "url(#arrow-right-orange)");
+                    }
+                    if(arrowid.hasAttribute("marker-end")){
+                        arrowid.setAttribute("marker-end", "url(#arrow-right-orange)");
+                    }
+                }
                 // Update the style for each child button to yellow and enable the button
                 if (childrenIds) {
                     childrenIds.forEach(childId => {
@@ -905,7 +954,17 @@
             // Save the button being clicked
             const clickedButtonID = e.target.id;
         // Here we start the search from the node clicked and give it the base case handler and node action handler methods
-            actionSearch(buttonNodes[e.target.id], stillHasValidPath,(node) => deactivateButton(node, clickedButtonID));
+            actionSearch(buttonNodes[e.target.id], stillHasValidPath,(node) => deactivateButton(node, clickedButtonID), (node) => deactivateArrow(node));
+
+            const arrows = arrowMap.get(e.target.id);
+                for(let arrow of arrows) {
+                    let arrowid = document.getElementById(arrow);
+                    
+                    
+                    arrowid.setAttribute("stroke", "gray");
+
+                    // actionSearch(buttonNodes[e.target.id], stillHasValidPath,(node) => revertArrow(arrowid, "gray"));
+                }
     });
         }
         // Here we will setup all of the relationships between the nodes in the digraph
